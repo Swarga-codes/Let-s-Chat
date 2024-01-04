@@ -1,11 +1,14 @@
-
+'use client'
 import React from 'react'
 import { BarChart, Wallet, Newspaper, BellRing, Paperclip, Brush, Wrench, Search } from 'lucide-react'
 import Image from 'next/image'
 import ChatLogo from '@/public/chat.png'
-
+import { usePathname } from 'next/navigation'
 export default function SideNav() {
-
+const pathname=usePathname()
+if(pathname==='/login'){
+  return null
+}
 
   return (
     <aside className="flex h-screen w-96 flex-col overflow-y-auto border-r bg-black px-5 py-8">
