@@ -18,11 +18,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className} style={{overflow:'hidden'}}>
         <Providers>
           <div className='flex'>
             <SideNav/>
-            <div>
+            <div className='flex-1'>
           {children}
           </div>
           </div>

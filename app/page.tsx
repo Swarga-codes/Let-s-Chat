@@ -1,7 +1,11 @@
 'use client'
-import { useSession,signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
+import WelcomePage from '@/app/ui/WelcomePage'
+import ChatNav from '@/app/ui/ChatNav'
+import ChatBox from '@/app/ui/ChatBox'
+import ChatSection from './ui/ChatSection'
 
 export default function Home() {
   const {data:session}=useSession()
@@ -9,13 +13,11 @@ export default function Home() {
 redirect('/login')
   }
   return (
-    <><h1>Welcome</h1>
-     <button
-               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              onClick={()=>signOut()}
-             >
-               Sign Out
-             </button>
+    <>
+     {/* <WelcomePage/> */}
+     <ChatNav/>
+     <ChatSection/>
+     <ChatBox/>
     </>
    
   )
