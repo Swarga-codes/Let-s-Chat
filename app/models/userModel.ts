@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-let userSchema= mongoose.Schema({
+let userSchema=new mongoose.Schema({
     name:{
         type:String,
         required:true
@@ -8,6 +8,10 @@ let userSchema= mongoose.Schema({
     email:{
         type:String,
         required:true
+    },
+    profilePic:{
+        type:String,
+        default:"https://www.hotelbooqi.com/wp-content/uploads/2021/12/128-1280406_view-user-icon-png-user-circle-icon-png.png"
     }
 },{
     timestamps:true
