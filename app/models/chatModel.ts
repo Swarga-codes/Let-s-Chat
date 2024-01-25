@@ -10,6 +10,11 @@ const chatSchema=new mongoose.Schema({
             ref:'USER'
         }
     ],
+    lastMessageId:{
+        type:ObjectId,
+        ref:'MESSAGE'
+    }
+    ,
     isGroupChat:{
         type:Boolean,
         default:false
