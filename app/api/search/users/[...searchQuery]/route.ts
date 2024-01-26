@@ -7,8 +7,6 @@ export async function GET(request:Request){
     let searchQuery=splitUrl[splitUrl.length-1]
     await connectDB();
     const findByUserOrEmail=await USER.find({$or:[{email:{$regex:searchQuery,$options:'i'}},{name:{$regex:searchQuery,$options:'i'}}]})
-    if(findByUserOrEmail.length===0){
-        return NextResponse.json({text:'No user found!'},{status:404})
-    }
+   
     return NextResponse.json(findByUserOrEmail,{status:200})
 }

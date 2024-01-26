@@ -1,15 +1,20 @@
 'use client'
-import React,{Fragment} from 'react'
+import React,{Fragment, useState} from 'react'
 import { Menu, Transition } from '@headlessui/react'
 
 import Image from 'next/image'
 import ChatLogo from '@/public/chat.png'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
+import SearchResults from './SearchResults'
+import { fetchSearchResults } from '../lib/actions'
 function classNames(...classes:string[]) {
   return classes.filter(Boolean).join(' ')
 }
 export default function SideNav() {
+const [searchQuery,setSearchQuery]=useState('')
+const [searchData,setSearchData]=useState([])
+const [isSearching,setIsSearching]=useState(false)
 const pathname=usePathname()
 if(pathname==='/login'){
   return null
@@ -81,8 +86,17 @@ if(pathname==='/login'){
         <nav className="-mx-3 space-y-6 ">
           <div className="mt-3 space-y-3">
          
-           <input type="text" className='bg-gray-700 outline-none text-white p-2 px-4 w-full rounded-xl' placeholder='Search for users...'/>
+           <input type="text" value={searchQuery} onChange={async(e)=>{
+            setSearchQuery(e.target.value)
+            if(searchQuery){
+            setIsSearching(true)
+            setSearchData(await fetchSearchResults(e.target.value))
+            setIsSearching(false)
+            }
+           }
+           } className='bg-gray-700 outline-none text-white p-2 px-4 w-full rounded-xl' placeholder='Search for users...'/>
           </div>
+          {searchQuery && <SearchResults userData={searchData} isSearching={isSearching}/>}
           <div className="space-y-3 ">
             <label className="px-3 text-md font-semibold uppercase text-white">My Chats</label>
             <div
