@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import {redirect} from 'next/navigation'
-const handler=NextAuth({
+
+export const authOptions={
   providers:[GoogleProvider({
     clientId:process.env.AUTH_GOOGLE_ID??"",
     clientSecret:process.env.AUTH_GOOGLE_SECRET??""
@@ -22,9 +22,7 @@ const handler=NextAuth({
         })
       })
     
-    if(res.ok){
-      return user
-    }
+   
     
      
      }
@@ -33,8 +31,18 @@ const handler=NextAuth({
      }
     }
       return user
-    }
+    },
+    // async jwt({token,account}){
+    //   token.accessToken=account?.access_token
+    //   return token
+    // },
+    // async session({ session, token, user }) {
+    //   // Send properties to the client, like an access_token from a provider.
+    //   session.accessToken = token.accessToken
+    //   return session
+    // }
   }
-})
+}
+const handler=NextAuth(authOptions)
 
 export {handler as GET, handler as POST}

@@ -6,18 +6,33 @@ import WelcomePage from '@/app/ui/WelcomePage'
 import ChatNav from '@/app/ui/ChatNav'
 import ChatBox from '@/app/ui/ChatBox'
 import ChatSection from './ui/ChatSection'
-
+import { useState } from 'react'
+import SideNav from './ui/SideNav'
+import { welcomePageContext } from './lib/context'
 export default function Home() {
   const {data:session}=useSession()
+  const [isWelcome,setIsWelcome]=useState(true)
   if(!session){
 redirect('/login')
   }
   return (
     <>
-     {/* <WelcomePage/> */}
+    <welcomePageContext.Provider value={{isWelcome,setIsWelcome}}>
+      <div className='flex'>
+            <SideNav/>
+            <div className='flex-1'>
+            {isWelcome?
+     <WelcomePage/>
+     :
+     <>
      <ChatNav/>
      <ChatSection/>
      <ChatBox/>
+     </>}
+          </div>
+          </div>
+  
+          </welcomePageContext.Provider>
     </>
    
   )
