@@ -2,18 +2,28 @@ import connectDB from "@/app/lib/database";
 import CHAT from "@/app/models/chatModel";
 import USER from "@/app/models/userModel";
 import { NextResponse } from "next/server";
+import { decode } from "next-auth/jwt";
 import mongoose from 'mongoose'
 export async function POST(req:Request){
-  if(!req.cookies.has('next-auth.session-token')){
+  const token=req.cookies.get('next-auth.session-token')?.value
+    if(!token){
     return NextResponse.json({error:'unauthorized'},{status:401})
-  }
+    }
+   
   let body=await req.json()
   const {chatName,participants,isGroupChat,GroupAdminEmail}=body
   try{
+   
   await connectDB();
   const reqUser=await USER.find({email:GroupAdminEmail})
   if(reqUser.length===0) return NextResponse.json({error:'Invalid user!'})
   participants.push(reqUser[0].id+"")
+  const isExistingChat=await CHAT.find()
+for(const chat of isExistingChat){
+    if(JSON.stringify(participants.sort())===JSON.stringify(chat.participants.sort())){
+      return NextResponse.json({error:'Chat already exists!'},{status:409})
+    }
+  }
   if(isGroupChat){
     if(!chatName){
       return NextResponse.json({error:'Please provide a group name for the group chat!'},{status:422})
