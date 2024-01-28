@@ -22,6 +22,9 @@ const chatSchema=new mongoose.Schema({
     GroupAdmin:{
         type:ObjectId,
         ref:'USER'
+    },
+    GroupPhoto:{
+        type:String
     }
 },{
     timestamps:true

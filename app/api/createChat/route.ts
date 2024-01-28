@@ -11,7 +11,7 @@ export async function POST(req:Request){
     }
    
   let body=await req.json()
-  const {chatName,participants,isGroupChat,GroupAdminEmail}=body
+  const {chatName,participants,isGroupChat,GroupAdminEmail,GroupPhoto}=body
   try{
    
   await connectDB();
@@ -44,6 +44,7 @@ for(const chat of isExistingChat){
   })
   if (isGroupChat) {
     chat.GroupAdmin = mongoose.Types.ObjectId(reqUser[0].id);
+    chat.GroupPhoto = GroupPhoto?GroupPhoto:"https://www.hotelbooqi.com/wp-content/uploads/2021/12/128-1280406_view-user-icon-png-user-circle-icon-png.png"
   }
   const createChat=await chat.save()
   if(!createChat) return NextResponse.json({error:'Could not create chat, try again'},{status:500})

@@ -1,5 +1,5 @@
 'use client'
-import React,{Fragment, useContext, useState} from 'react'
+import React,{Fragment, useContext, useEffect, useState} from 'react'
 import { Menu, Transition } from '@headlessui/react'
 
 import Image from 'next/image'
@@ -7,8 +7,9 @@ import ChatLogo from '@/public/chat.png'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import SearchResults from './SearchResults'
-import { fetchSearchResults } from '../lib/actions'
+import { fetchSearchResults, fetchUserChats } from '../lib/actions'
 import { welcomePageContext } from '../lib/context'
+import { useSession } from 'next-auth/react'
 function classNames(...classes:string[]) {
   return classes.filter(Boolean).join(' ')
 }
@@ -16,12 +17,25 @@ export default function SideNav() {
 const [searchQuery,setSearchQuery]=useState('')
 const [searchData,setSearchData]=useState([])
 const [isSearching,setIsSearching]=useState(false)
+const [chats,setChats]=useState([])
 const {isWelcome,setIsWelcome}=useContext(welcomePageContext)
+const {data:session}=useSession()
 const pathname=usePathname()
 if(pathname==='/login'){
   return null
 }
-
+function displayUser(participants){
+  if(participants[0].email===session?.user?.email){
+    return participants[1]
+  }
+  return participants[0]
+}
+useEffect(()=>{
+async function fetchChats(){
+setChats(await fetchUserChats())
+}
+fetchChats()
+},[])
   return (
     <aside className="flex h-screen w-96 flex-col border-r bg-black px-5 py-8">
         <div className='flex'>
@@ -101,22 +115,24 @@ if(pathname==='/login'){
           {searchQuery && <SearchResults userData={searchData} isSearching={isSearching}/>}
           <div className="space-y-3 ">
             <label className="px-3 text-md font-semibold uppercase text-white">My Chats</label>
-            <div
+            {chats?.map(chat=>(
+              <div
               className="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
-            onClick={()=>setIsWelcome(false)}
+           id={chat.id} onClick={()=>setIsWelcome(false)}
             >
                <Image
-            src={"https://www.hotelbooqi.com/wp-content/uploads/2021/12/128-1280406_view-user-icon-png-user-circle-icon-png.png"}
+            src={chat.isGroupChat?chat?.GroupPhoto:displayUser(chat.participants)?.profilePic}
             alt="profile pic"
             width={40}
             height={40}
           />
           <div className='ml-2'>
-              <p className="mx-2 text-md font-semibold">John Doe</p>
+              <p className="mx-2 text-md font-semibold">{chat.chatName?chat.chatName:displayUser(chat.participants)?.name}</p>
             
-              <p className="mx-2 text-sm font-md">Heyy!</p>
+              <p className="mx-2 text-sm font-md">{chat.lastMessageId?chat.lastMessageId:"Start conversation!"}</p>
               </div>
             </div>
+            ))}
           </div>
 
     
