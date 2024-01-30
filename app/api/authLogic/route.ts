@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/app/lib/database";
 import USER from "@/app/models/userModel";
-export async function POST(req:Request){
+export async function POST(req:NextRequest){
      let body = await req.json()
      const {name,email,profilePic}=body
      try{

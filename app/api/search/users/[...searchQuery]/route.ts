@@ -1,8 +1,8 @@
 import connectDB from "@/app/lib/database";
 import USER from "@/app/models/userModel";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request:Request){
+export async function GET(request:NextRequest){
     let splitUrl=request.url.split('/')
     let searchQuery=splitUrl[splitUrl.length-1]
     await connectDB();
