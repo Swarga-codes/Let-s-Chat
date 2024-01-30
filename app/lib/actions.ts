@@ -29,4 +29,20 @@ async function fetchUserChats(){
 }
 
 
-export {fetchSearchResults, createChat, fetchUserChats}
+async function sendMessage(chatId:string,content:string) {
+    const response=await fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/api/sendMessage`,{
+        method:'POST',
+        headers:{
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify({
+            chatId,
+            content
+        })
+        
+    })
+    const data=await response.json()
+    console.log(data)
+}
+
+export {fetchSearchResults, createChat, fetchUserChats, sendMessage}

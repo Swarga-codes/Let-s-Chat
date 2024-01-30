@@ -20,7 +20,7 @@ export async function POST(req:NextRequest) {
     if(!chatId || !content){
         return NextResponse.json({error:'Required fields are missing!'},{status:422})
     }
-    const doesChatExist=await CHAT.find({id:chatId})
+    const doesChatExist=await CHAT.find({_id:chatId})
     if(doesChatExist.length===0) return NextResponse.json({error:'Invalid chat id'},{status:404}) 
     const newMessage={
         sender:reqUser[0]._id,
