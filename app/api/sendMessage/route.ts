@@ -29,6 +29,7 @@ export async function POST(req:NextRequest) {
     }
     const sendMessage=await MESSAGE.create(newMessage)
     if(!sendMessage) return NextResponse.json({error:'Could not send message, try again!'},{status:500})
+    await CHAT.findByIdAndUpdate(chatId,{lastMessageId:sendMessage})
     return NextResponse.json({success:'Message sent successfully'},{status:200})
     }
     catch(err){
