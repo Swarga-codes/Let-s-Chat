@@ -1,3 +1,7 @@
 import { createContext } from "react";
 
-export const welcomePageContext=createContext()
+ const welcomePageContext=createContext()
+ const currentChatContext=createContext()
+
+
+ export {welcomePageContext,currentChatContext}

@@ -8,16 +8,18 @@ import ChatBox from '@/app/ui/ChatBox'
 import ChatSection from './ui/ChatSection'
 import { useState } from 'react'
 import SideNav from './ui/SideNav'
-import { welcomePageContext } from './lib/context'
+import { welcomePageContext,currentChatContext } from './lib/context'
 export default function Home() {
   const {data:session}=useSession()
   const [isWelcome,setIsWelcome]=useState(true)
+  const [currentChat,setCurrentChat]=useState()
   if(!session){
 redirect('/login')
   }
   return (
     <>
     <welcomePageContext.Provider value={{isWelcome,setIsWelcome}}>
+      <currentChatContext.Provider value={{currentChat,setCurrentChat}}>
       <div className='flex'>
             <SideNav/>
             <div className='flex-1'>
@@ -31,7 +33,7 @@ redirect('/login')
      </>}
           </div>
           </div>
-  
+          </currentChatContext.Provider>
           </welcomePageContext.Provider>
     </>
    

@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import SearchResults from './SearchResults'
 import { fetchSearchResults, fetchUserChats } from '../lib/actions'
-import { welcomePageContext } from '../lib/context'
+import { currentChatContext, welcomePageContext } from '../lib/context'
 import { useSession } from 'next-auth/react'
 function classNames(...classes:string[]) {
   return classes.filter(Boolean).join(' ')
@@ -19,6 +19,7 @@ const [searchData,setSearchData]=useState([])
 const [isSearching,setIsSearching]=useState(false)
 const [chats,setChats]=useState([])
 const {isWelcome,setIsWelcome}=useContext(welcomePageContext)
+const {setCurrentChat}=useContext(currentChatContext)
 const {data:session}=useSession()
 const pathname=usePathname()
 if(pathname==='/login'){
@@ -118,7 +119,10 @@ fetchChats()
             {chats?.map(chat=>(
               <div
               className="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
-           id={chat.id} onClick={()=>setIsWelcome(false)}
+           key={chat._id} onClick={()=>{
+            setIsWelcome(false)
+          setCurrentChat(chat)
+          }}
             >
                <Image
             src={chat.isGroupChat?chat?.GroupPhoto:displayUser(chat.participants)?.profilePic}
