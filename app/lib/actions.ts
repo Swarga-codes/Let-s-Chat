@@ -22,11 +22,7 @@ async function createChat(chatName:string,participants:string[],isGroupChat:bool
     console.log(data)
 }
 
-async function fetchUserChats(){
-    const response=await fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/api/myChats`)
-    const data=await response.json()
-    return data
-}
+
 
 
 async function sendMessage(chatId:string,content:string) {
@@ -45,4 +41,4 @@ async function sendMessage(chatId:string,content:string) {
     console.log(data)
 }
 
-export {fetchSearchResults, createChat, fetchUserChats, sendMessage}
+export {fetchSearchResults, createChat, sendMessage}

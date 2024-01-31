@@ -14,8 +14,13 @@ export async function GET(req:NextRequest){
       });
 
     const getUserId=await USER.find({email:decoded?.email})
+     
     if(getUserId.length===0) return NextResponse.json({error:'Could not retrieve user data'},{status:404})
-    const getUserChats=await CHAT.find({participants:{$in:[getUserId[0].id]}}).populate('participants')
+    const getUserChats=await CHAT.find({participants:{$in:[getUserId[0]._id]}}).populate('participants').populate({
+        path: 'lastMessageId',
+        model:'CHAT',
+        match: { lastMessageId: { $exists: true } } // Ensures only documents with `editor` field are populated
+      })
     return NextResponse.json(getUserChats,{status:200})
     }
     catch(err){

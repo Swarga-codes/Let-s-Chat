@@ -7,7 +7,7 @@ import ChatLogo from '@/public/chat.png'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import SearchResults from './SearchResults'
-import { fetchSearchResults, fetchUserChats } from '../lib/actions'
+import { fetchSearchResults } from '../lib/actions'
 import { currentChatContext, welcomePageContext } from '../lib/context'
 import { useSession } from 'next-auth/react'
 function classNames(...classes:string[]) {
@@ -31,12 +31,19 @@ function displayUser(participants){
   }
   return participants[0]
 }
-useEffect(()=>{
-async function fetchChats(){
-setChats(await fetchUserChats())
+
+async function fetchUserChats(){
+  const response=await fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/api/myChats`)
+  const data=await response.json()
+  console.log(data)
+  if(!data.error){
+  setChats(data)
+  }
 }
-fetchChats()
+useEffect(()=>{
+fetchUserChats()
 },[])
+
   return (
     <aside className="flex h-screen w-96 flex-col border-r bg-black px-5 py-8">
         <div className='flex'>
@@ -116,7 +123,7 @@ fetchChats()
           {searchQuery && <SearchResults userData={searchData} isSearching={isSearching}/>}
           <div className="space-y-3 ">
             <label className="px-3 text-md font-semibold uppercase text-white">My Chats</label>
-            {chats?.map(chat=>(
+            {chats.map(chat=>(
               <div
               className="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
            key={chat._id} onClick={()=>{
@@ -133,10 +140,11 @@ fetchChats()
           <div className='ml-2'>
               <p className="mx-2 text-md font-semibold">{chat.chatName?chat.chatName:displayUser(chat.participants)?.name}</p>
             
-              <p className="mx-2 text-sm font-md">{chat.lastMessageId?chat.lastMessageId:"Start conversation!"}</p>
+              <p className="mx-2 text-sm font-md">{chat.lastMessageId?chat.lastMessageId?.content:"Start conversation!"}</p>
               </div>
             </div>
-            ))}
+            ))
+            }
           </div>
 
     
