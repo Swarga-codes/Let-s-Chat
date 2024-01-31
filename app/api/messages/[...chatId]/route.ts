@@ -20,7 +20,7 @@ export async function GET(req:NextRequest){
     if(!isValidChat[0].participants.includes(getUserId[0]._id)){
         return NextResponse.json({error:'User not authorized to access these messages'},{status:401})
     }
-    const findMessages=await MESSAGE.find({chatId:chatId})
+    const findMessages=await MESSAGE.find({chatId:chatId}).populate('sender')
     return NextResponse.json(findMessages,{status:200})
     }
     catch(err){

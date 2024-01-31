@@ -7,7 +7,7 @@ import ChatLogo from '@/public/chat.png'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import SearchResults from './SearchResults'
-import { fetchSearchResults } from '../lib/actions'
+import { fetchSearchResults, fetchUserChats } from '../lib/actions'
 import { currentChatContext, welcomePageContext } from '../lib/context'
 import { useSession } from 'next-auth/react'
 function classNames(...classes:string[]) {
@@ -25,25 +25,22 @@ const pathname=usePathname()
 if(pathname==='/login'){
   return null
 }
+
+async function fetchChats(){
+  const fetchedData=await fetchUserChats()
+  setChats(fetchedData)
+  }
+
+useEffect(()=>{
+
+fetchChats()
+},[chats])
 function displayUser(participants){
   if(participants[0].email===session?.user?.email){
     return participants[1]
   }
   return participants[0]
 }
-
-async function fetchUserChats(){
-  const response=await fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/api/myChats`)
-  const data=await response.json()
-  console.log(data)
-  if(!data.error){
-  setChats(data)
-  }
-}
-useEffect(()=>{
-fetchUserChats()
-},[])
-
   return (
     <aside className="flex h-screen w-96 flex-col border-r bg-black px-5 py-8">
         <div className='flex'>
@@ -123,7 +120,7 @@ fetchUserChats()
           {searchQuery && <SearchResults userData={searchData} isSearching={isSearching}/>}
           <div className="space-y-3 ">
             <label className="px-3 text-md font-semibold uppercase text-white">My Chats</label>
-            {chats.map(chat=>(
+            {chats?.map(chat=>(
               <div
               className="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
            key={chat._id} onClick={()=>{
