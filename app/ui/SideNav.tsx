@@ -19,7 +19,7 @@ const [searchData,setSearchData]=useState([])
 const [isSearching,setIsSearching]=useState(false)
 const [chats,setChats]=useState([])
 const {isWelcome,setIsWelcome}=useContext(welcomePageContext)
-const {setCurrentChat}=useContext(currentChatContext)
+const {currentChat,setCurrentChat}=useContext(currentChatContext)
 const {data:session}=useSession()
 const pathname=usePathname()
 if(pathname==='/login'){
@@ -58,10 +58,11 @@ function displayUser(participants){
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
                       <Image
-            src={"https://www.hotelbooqi.com/wp-content/uploads/2021/12/128-1280406_view-user-icon-png-user-circle-icon-png.png"}
+            src={session?.user?.image}
             alt="profile pic"
             width={40}
             height={40}
+            className='rounded-3xl'
             
           />
                     </Menu.Button>
@@ -122,7 +123,7 @@ function displayUser(participants){
             <label className="px-3 text-md font-semibold uppercase text-white">My Chats</label>
             {chats?.map(chat=>(
               <div
-              className="flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
+              className={`flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700 ${currentChat?._id===chat?._id?"bg-gray-100 text-gray-700":""}`}
            key={chat._id} onClick={()=>{
             setIsWelcome(false)
           setCurrentChat(chat)
