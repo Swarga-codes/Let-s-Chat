@@ -27,10 +27,16 @@ export async function POST(req:NextRequest) {
         content,
         chatId
     }
-    const sendMessage=await MESSAGE.create(newMessage)
+    let sendMessage=await MESSAGE.create(newMessage)
     if(!sendMessage) return NextResponse.json({error:'Could not send message, try again!'},{status:500})
-    await CHAT.findByIdAndUpdate(chatId,{lastMessageId:sendMessage})
-    return NextResponse.json({success:'Message sent successfully'},{status:200})
+    await CHAT.findByIdAndUpdate(chatId,{lastMessageId:sendMessage})    
+    sendMessage=await MESSAGE.populate('sender').execPopulate()
+    sendMessage=await MESSAGE.populate('chatId').execPopulate()
+    sendMessage = await USER.populate(sendMessage, {
+        path: "chatId.participants",
+        select: "name profilePic email",
+      });
+    return NextResponse.json(sendMessage,{status:200})
     }
     catch(err){
         return NextResponse.json({error:err},{status:500})

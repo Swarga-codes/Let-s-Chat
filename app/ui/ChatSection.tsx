@@ -2,18 +2,31 @@ import React, { useContext, useEffect, useState } from 'react'
 import { currentChatContext } from '../lib/context'
 import { fetchMessages } from '../lib/actions'
 import { useSession } from 'next-auth/react'
+import ChatBox from './ChatBox'
+import { io } from 'socket.io-client'
+const socket=io('http://localhost:8000')
 
 function ChatSection() {
+       
     const {currentChat}=useContext(currentChatContext)
     const {data:session}=useSession()
     const [messages,setMessages]=useState([])
+    const [isSocketConnected,setIsSocketConnected]=useState(false)
+  const [messageInput,setMessageInput]=useState("")
     async function getMessages(){
         setMessages(await fetchMessages(currentChat._id))
+        socket.emit('join chat',currentChat._id)
     }
+  
     useEffect(()=>{
-getMessages()
-    },[currentChat])
+socket.emit('setup',currentChat.participants.filter(participant=>participant.email===session?.user?.email)[0])
+socket.on('connection',()=>setIsSocketConnected(true))
+    },[])
+    useEffect(()=>{
+        getMessages()
+            },[currentChat])
   return (
+    <>
     <div className='p-3 overflow-y-scroll max-h-[64%]'>
         {messages.length===0 && <p className='font-bold text-center'>Oops no texts! Start a conversation!</p>}
        {messages.length>0 && messages?.map(message=>(
@@ -30,6 +43,8 @@ getMessages()
       
     
     </div>
+     <ChatBox setMessageInput={setMessageInput} messageInput={messageInput}/>
+     </>
   )
 }
 

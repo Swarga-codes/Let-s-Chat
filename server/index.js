@@ -9,7 +9,24 @@ const io=new Server(server,{
 })
 
 io.on('connection',socket=>{
-    console.log('User joined',socket.id)
+    console.log('connected to socket')
+    socket.on('setup',userData=>{
+        socket.join(userData._id)
+        // console.log(userData._id);
+        socket.emit("user connected")   
+        socket.on('join chat',room=>{
+            socket.join(room)
+            console.log('Joined room',room)
+        })
+        socket.on('new message',(newMessage)=>{
+            let chat=newMessage.chat
+            if(!chat.users) return console.log('chat.users is not defined')
+            chat.users.forEach(user=>{
+        if(user._id===newMessage.sender._id) return
+        socket.in(user._id).emit('message received',newMessage)
+            })
+        })
+    })
 })
 
 server.listen(8000,()=>console.log('Listening...'))
