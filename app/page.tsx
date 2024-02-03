@@ -6,9 +6,11 @@ import WelcomePage from '@/app/ui/WelcomePage'
 import ChatNav from '@/app/ui/ChatNav'
 import ChatBox from '@/app/ui/ChatBox'
 import ChatSection from './ui/ChatSection'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SideNav from './ui/SideNav'
 import { welcomePageContext,currentChatContext } from './lib/context'
+import { io } from 'socket.io-client'
+const socket=io('http://localhost:8000')
 export default function Home() {
   const {data:session}=useSession()
   const [isWelcome,setIsWelcome]=useState(true)
@@ -16,6 +18,7 @@ export default function Home() {
   if(!session){
 redirect('/login')
   }
+  
   return (
     <>
     <welcomePageContext.Provider value={{isWelcome,setIsWelcome}}>
