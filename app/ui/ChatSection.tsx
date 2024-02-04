@@ -25,10 +25,9 @@ socket.on('connection',()=>setIsSocketConnected(true))
     useEffect(()=>{
         getMessages()
         chatCompare=currentChat
-            },[currentChat])
+            },[messages])
             useEffect(()=>{
-                return()=>{
-                socket.on('message received',newMessage=>{
+                socket.on('message received',(newMessage)=>{
                     if(!chatCompare || chatCompare._id!==newMessage.chatId._id){
                         //notify
                     }
@@ -36,7 +35,7 @@ socket.on('connection',()=>setIsSocketConnected(true))
                         setMessages([...messages,newMessage])
                     }
                 })
-            }
+            
             })
   return (
     <>

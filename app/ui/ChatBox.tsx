@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { SendHorizontal } from 'lucide-react'
 import { currentChatContext } from '../lib/context'
 import { sendMessage } from '../lib/actions'

@@ -26,8 +26,6 @@ export async function GET(req:NextRequest){
             path:'participants'
         }
     })
-    // findMessages=await findMessages.populate('chatId')
-    // findMessages=await findMessages.populate('chatId.participants')
     return NextResponse.json(findMessages,{status:200})
     }
     catch(err){

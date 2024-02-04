@@ -4,7 +4,7 @@ import { Server } from 'socket.io'
 const app=express()
 const server=createServer(app)
 const io=new Server(server,{
-    pingTimeout:60000,
+    // pingTimeout:60000,
     cors:'http://localhost:3000'
 })
 
@@ -22,7 +22,7 @@ io.on('connection',socket=>{
             let chat=newMessage.chatId
             if(!chat.participants) return console.log('chat.participants is not defined')
             chat.participants.forEach(user=>{
-        if(user._id===newMessage.sender._id) return
+        if(user._id==newMessage.sender._id) return
         socket.in(user._id).emit('message received',newMessage)
             })
         })
