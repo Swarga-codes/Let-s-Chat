@@ -20,10 +20,17 @@ export async function GET(req:NextRequest){
     if(!isValidChat[0].participants.includes(getUserId[0]._id)){
         return NextResponse.json({error:'User not authorized to access these messages'},{status:401})
     }
-    const findMessages=await MESSAGE.find({chatId:chatId}).populate('sender')
+    let findMessages=await MESSAGE.find({chatId:chatId}).populate('sender').populate('chatId').populate({
+        path:'chatId',
+        populate:{
+            path:'participants'
+        }
+    })
+    // findMessages=await findMessages.populate('chatId')
+    // findMessages=await findMessages.populate('chatId.participants')
     return NextResponse.json(findMessages,{status:200})
     }
     catch(err){
-        return NextResponse.json({error:err},{status:500})
+        return NextResponse.json(err,{status:500})
     }
 }

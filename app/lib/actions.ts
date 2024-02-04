@@ -42,7 +42,7 @@ async function sendMessage(chatId:string,content:string) {
         
     })
     const data=await response.json()
-    console.log(data)
+    return data
 }
 
 async function fetchMessages(chatId:string) {

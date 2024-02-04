@@ -7,7 +7,7 @@ import { io } from 'socket.io-client'
 const socket=io('http://localhost:8000')
 
 function ChatSection() {
-       
+       let chatCompare;
     const {currentChat}=useContext(currentChatContext)
     const {data:session}=useSession()
     const [messages,setMessages]=useState([])
@@ -24,10 +24,23 @@ socket.on('connection',()=>setIsSocketConnected(true))
     },[])
     useEffect(()=>{
         getMessages()
+        chatCompare=currentChat
             },[currentChat])
+            useEffect(()=>{
+                return()=>{
+                socket.on('message received',newMessage=>{
+                    if(!chatCompare || chatCompare._id!==newMessage.chatId._id){
+                        //notify
+                    }
+                    else{
+                        setMessages([...messages,newMessage])
+                    }
+                })
+            }
+            })
   return (
     <>
-    <div className='p-3 overflow-y-scroll max-h-[64%]'>
+    <div className='p-3 overflow-y-scroll max-h-[500px]'>
         {messages.length===0 && <p className='font-bold text-center'>Oops no texts! Start a conversation!</p>}
        {messages.length>0 && messages?.map(message=>(
         session?.user?.email!==message?.sender?.email?(
@@ -43,7 +56,7 @@ socket.on('connection',()=>setIsSocketConnected(true))
       
     
     </div>
-     <ChatBox setMessageInput={setMessageInput} messageInput={messageInput}/>
+     <ChatBox setMessageInput={setMessageInput} messageInput={messageInput} messages={messages} setMessages={setMessages} socket={socket}/>
      </>
   )
 }

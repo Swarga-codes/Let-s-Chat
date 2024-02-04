@@ -19,9 +19,9 @@ io.on('connection',socket=>{
             console.log('Joined room',room)
         })
         socket.on('new message',(newMessage)=>{
-            let chat=newMessage.chat
-            if(!chat.users) return console.log('chat.users is not defined')
-            chat.users.forEach(user=>{
+            let chat=newMessage.chatId
+            if(!chat.participants) return console.log('chat.participants is not defined')
+            chat.participants.forEach(user=>{
         if(user._id===newMessage.sender._id) return
         socket.in(user._id).emit('message received',newMessage)
             })
