@@ -11,7 +11,7 @@ export async function POST(req:NextRequest) {
     try{
     const decoded = await decode({
         token: token,
-        secret: process.env.NEXTAUTH_SECRET,
+        secret: process.env.NEXTAUTH_SECRET || "",
       });
     
     const reqUser=await USER.find({email:decoded?.email})

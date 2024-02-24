@@ -43,7 +43,7 @@ for(const chat of isExistingChat){
     isGroupChat,
   })
   if (isGroupChat) {
-    chat.GroupAdmin = mongoose.Types.ObjectId(reqUser[0].id);
+    chat.GroupAdmin = new mongoose.Types.ObjectId(reqUser[0].id);
     chat.GroupPhoto = GroupPhoto?GroupPhoto:"https://www.hotelbooqi.com/wp-content/uploads/2021/12/128-1280406_view-user-icon-png-user-circle-icon-png.png"
   }
   const createChat=await chat.save()
