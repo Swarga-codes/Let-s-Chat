@@ -7,7 +7,7 @@ import GoogleProvider from "next-auth/providers/google";
     clientSecret:process.env.AUTH_GOOGLE_SECRET??""
   })],
   callbacks:{
-    async signIn({user,account}){
+    async signIn({user,account}:any){
       if(account.provider==='google'){
      try{
       const res=await fetch('http://localhost:3000/api/authLogic',{
