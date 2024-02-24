@@ -22,6 +22,10 @@ const {isWelcome,setIsWelcome}=useContext(welcomePageContext)
 const {currentChat,setCurrentChat}=useContext(currentChatContext)
 const {data:session}=useSession()
 const pathname=usePathname()
+useEffect(()=>{
+
+  fetchChats()
+  },[])
 if(pathname==='/login'){
   return null
 }
@@ -31,16 +35,14 @@ async function fetchChats(){
   setChats(fetchedData)
   }
 
-useEffect(()=>{
 
-fetchChats()
-},[chats])
 function displayUser(participants){
   if(participants[0].email===session?.user?.email){
     return participants[1]
   }
   return participants[0]
 }
+
   return (
     <aside className="flex h-screen w-96 flex-col border-r bg-black px-5 py-8">
         <div className='flex'>
