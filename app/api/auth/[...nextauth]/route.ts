@@ -32,11 +32,11 @@ import GoogleProvider from "next-auth/providers/google";
     }
       return user
     },
-    async jwt({token,account}){
+    async jwt({token,account}:any){
       token.accessToken=account?.access_token
       return token
     },
-    async session({ session, token, user }) {
+    async session({ session, token, user }:any) {
       // Send properties to the client, like an access_token from a provider.
       session.accessToken = token.accessToken
       return session
