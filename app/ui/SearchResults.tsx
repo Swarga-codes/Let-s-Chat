@@ -4,13 +4,13 @@ import Image from 'next/image'
 import { createChat } from '../lib/actions'
 import { useSession } from 'next-auth/react'
 import { ReturnDocument } from 'mongodb'
- function SearchResults({userData,isSearching}) {
+ function SearchResults({userData,isSearching}:any) {
     const {data:session}=useSession()
   return (
     <div className='border-gray-400 border-2 rounded-lg'>
       {userData.length===0 && !isSearching && <p className='p-6'>No user found!</p>}
       {userData.length===0 && isSearching && <p className='p-6'>Searching for users...</p>}
-         {userData?.map((user:string,idx:number)=>(
+         {userData?.map((user:any,idx:number)=>(
 
         
             <div
@@ -22,7 +22,7 @@ import { ReturnDocument } from 'mongodb'
               }
              
               if(window.confirm(`Do you want to start a conversation with ${user?.name} ?`)){
-                await createChat("",[user._id],false,session?.user?.email)
+                await createChat("",[user._id],false,session?.user?.email || "")
               }
              }}>
                <Image

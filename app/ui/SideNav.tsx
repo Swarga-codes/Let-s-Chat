@@ -36,7 +36,7 @@ async function fetchChats(){
   }
 
 
-function displayUser(participants){
+function displayUser(participants:any){
   if(participants[0].email===session?.user?.email){
     return participants[1]
   }
@@ -60,7 +60,7 @@ function displayUser(participants){
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
                       <Image
-            src={session?.user?.image}
+            src={session?.user?.image || ""}
             alt="profile pic"
             width={40}
             height={40}
@@ -123,7 +123,7 @@ function displayUser(participants){
           {searchQuery && <SearchResults userData={searchData} isSearching={isSearching}/>}
           <div className="space-y-3 ">
             <label className="px-3 text-md font-semibold uppercase text-white">My Chats</label>
-            {chats?.map(chat=>(
+            {chats?.map((chat:any)=>(
               <div
               className={`flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700 ${currentChat?._id===chat?._id?"bg-gray-100 text-gray-700":""}`}
            key={chat._id} onClick={()=>{
