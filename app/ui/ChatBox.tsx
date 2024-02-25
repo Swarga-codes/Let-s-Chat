@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { SendHorizontal } from 'lucide-react'
 import { currentChatContext } from '../lib/context'
 import { sendMessage } from '../lib/actions'
-function ChatBox({messageInput,setMessageInput,messages,setMessages,socket}) {
+function ChatBox({messageInput,setMessageInput,messages,setMessages,socket}:any) {
   const {currentChat}=useContext(currentChatContext)
 
   return (

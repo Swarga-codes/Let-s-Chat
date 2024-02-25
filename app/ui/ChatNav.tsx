@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react'
 function ChatNav() {
   const {currentChat}=useContext(currentChatContext)
   const {data:session}=useSession()
-  function displayUser(participants){
+  function displayUser(participants:any){
     if(participants[0].email===session?.user?.email){
       return participants[1]
     }
