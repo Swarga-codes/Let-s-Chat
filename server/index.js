@@ -5,7 +5,7 @@ const app=express()
 const server=createServer(app)
 const io=new Server(server,{
     // pingTimeout:60000,
-    cors:'http://localhost:3000'
+    cors:'https://let-s-chat-sandy.vercel.app'
 })
 
 io.on('connection',socket=>{

@@ -5,7 +5,8 @@ import { useSession } from 'next-auth/react';
 import ChatBox from './ChatBox';
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:8000');
+// const socket = io('http://localhost:8000');
+const socket = io('https://let-s-chat.onrender.com');
 
 function ChatSection() {
   const chatCompare:any = useRef(null);
