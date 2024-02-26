@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React,{useEffect} from 'react'
 import Image from 'next/image'
 import ChatLogo from '@/public/chat.png'
 import { useSession, signIn } from 'next-auth/react'
@@ -10,6 +10,8 @@ const {data:session}=useSession()
 if(session){
   redirect('/')
 }
+
+
   return (
    
    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 w-[100vw]">

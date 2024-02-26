@@ -10,7 +10,7 @@ import GoogleProvider from "next-auth/providers/google";
     async signIn({user,account}:any){
       if(account.provider==='google'){
      try{
-      const res=await fetch('http://localhost:3000/api/authLogic',{
+      const res=await fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/api/authLogic`,{
         method:"POST",
         headers:{
           'Content-Type':'application/json'

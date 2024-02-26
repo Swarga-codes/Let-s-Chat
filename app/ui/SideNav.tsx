@@ -7,13 +7,16 @@ import ChatLogo from '@/public/chat.png'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import SearchResults from './SearchResults'
-import { fetchSearchResults, fetchUserChats } from '../lib/actions'
+import { fetchSearchResults } from '../lib/actions'
 import { currentChatContext, welcomePageContext } from '../lib/context'
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { redirect } from 'next/navigation'
 function classNames(...classes:string[]) {
   return classes.filter(Boolean).join(' ')
 }
 export default function SideNav() {
+  const router=useRouter()
 const [searchQuery,setSearchQuery]=useState('')
 const [searchData,setSearchData]=useState([])
 const [isSearching,setIsSearching]=useState(false)
@@ -24,17 +27,27 @@ const {data:session}=useSession()
 const pathname=usePathname()
 useEffect(()=>{
 
-  fetchChats()
+  fetchUserChats()
   },[])
 if(pathname==='/login'){
   return null
 }
+if(!session){
+  redirect('/login')
+}
 
-async function fetchChats(){
-  const fetchedData=await fetchUserChats()
-  setChats(fetchedData)
-  }
 
+// async function fetchChats(){
+//   const fetchedData=await fetchUserChats()
+//   setChats(fetchedData)
+//   }
+async function fetchUserChats(){
+  const response=await fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/api/myChats`,{credentials:'include'})
+  const data=await response.json()
+  console.log(data)
+  // return data
+  setChats(data)
+}
 
 function displayUser(participants:any){
   if(participants[0].email===session?.user?.email){
