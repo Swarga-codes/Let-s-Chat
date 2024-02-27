@@ -10,6 +10,7 @@ const socket = io('https://let-s-chat.onrender.com');
 
 function ChatSection() {
   const chatCompare:any = useRef(null);
+  const chatScroll:any=useRef(null)
   const { currentChat } = useContext(currentChatContext);
   const { data: session } = useSession();
   const [messages, setMessages] = useState([]);
@@ -29,6 +30,7 @@ function ChatSection() {
   useEffect(() => {
     getMessages();
     chatCompare.current = currentChat;
+   
   }, [currentChat, getMessages]);
 
   useEffect(() => {
@@ -40,10 +42,12 @@ function ChatSection() {
       }
     });
   }, []);
-
+useEffect(()=>{
+  chatScroll.current.scrollTop=chatScroll.current.scrollHeight
+},[messages])
   return (
     <>
-      <div className='p-3 overflow-y-scroll max-h-[500px]'>
+      <div className='p-3 overflow-y-scroll max-h-[500px]' ref={chatScroll}>
         {messages.length === 0 && <p className='font-bold text-center'>Oops no texts! Start a conversation!</p>}
         {messages.length > 0 && messages.map((message:any) => (
           session?.user?.email !== message?.sender?.email ? (
