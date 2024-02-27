@@ -155,9 +155,11 @@ async function fetchSearchResults(query:string){
     } 
   }} className='bg-gray-700 outline-none text-white p-2 px-4 w-full rounded-xl' placeholder='Search for users...'/>
           </div>
-          {searchQuery && <SearchResults userData={searchData} isSearching={isSearching}/>}
+          {searchQuery && <SearchResults userData={searchData} isSearching={isSearching} setChats={setChats}/>}
           <div className="space-y-3 ">
             <label className="px-3 text-md font-semibold uppercase text-white">My Chats</label>
+            
+            {chats?.length===0 &&  <p className="px-3 text-md font-semibold text-white">No Chats to display, search users to chat now!</p>}
             {chats?.map((chat:any)=>(
               <div
               className={`flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700 ${currentChat?._id===chat?._id?"bg-gray-100 text-gray-700":""}`}

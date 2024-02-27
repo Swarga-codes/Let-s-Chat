@@ -17,6 +17,7 @@ async function createChat(chatName:string,participants:string[],isGroupChat:bool
     })
     const data=await response.json()
     console.log(data)
+    return data
 }
 
 async function fetchUserChats(){

@@ -1,10 +1,9 @@
 'use client'
 import React from 'react'
 import Image from 'next/image'
-import { createChat } from '../lib/actions'
+import { createChat, fetchUserChats } from '../lib/actions'
 import { useSession } from 'next-auth/react'
-import { ReturnDocument } from 'mongodb'
- function SearchResults({userData,isSearching}:any) {
+ function SearchResults({userData,isSearching,setChats}:any) {
     const {data:session}=useSession()
   return (
     <div className='border-gray-400 border-2 rounded-lg'>
@@ -22,7 +21,12 @@ import { ReturnDocument } from 'mongodb'
               }
              
               if(window.confirm(`Do you want to start a conversation with ${user?.name} ?`)){
-                await createChat("",[user._id],false,session?.user?.email || "")
+
+                const message=await createChat("",[user._id],false,session?.user?.email || "")
+                if(message.success){
+                  setChats(await fetchUserChats())
+                }
+                
               }
              }}>
                <Image
