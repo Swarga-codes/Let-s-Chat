@@ -27,7 +27,6 @@ async function createChat(chatName:string,participants:string[],isGroupChat:bool
 async function fetchUserChats(){
     const response=await fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/api/myChats`)
     const data=await response.json()
-    console.log(data)
     return data
 }
 

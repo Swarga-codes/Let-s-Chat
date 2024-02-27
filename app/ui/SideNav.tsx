@@ -7,11 +7,10 @@ import ChatLogo from '@/public/chat.png'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import SearchResults from './SearchResults'
-import { fetchSearchResults } from '../lib/actions'
+import { fetchSearchResults, fetchUserChats } from '../lib/actions'
 import { currentChatContext, welcomePageContext } from '../lib/context'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { redirect } from 'next/navigation'
 function classNames(...classes:string[]) {
   return classes.filter(Boolean).join(' ')
 }
@@ -25,29 +24,13 @@ const {isWelcome,setIsWelcome}=useContext(welcomePageContext)
 const {currentChat,setCurrentChat}=useContext(currentChatContext)
 const {data:session}=useSession()
 const pathname=usePathname()
-useEffect(()=>{
 
-  fetchUserChats()
-  },[])
-if(pathname==='/login'){
-  return null
-}
-if(!session){
-  redirect('/login')
-}
+// if(pathname==='/login'){
+//   return null
+// } 
 
 
-// async function fetchChats(){
-//   const fetchedData=await fetchUserChats()
-//   setChats(fetchedData)
-//   }
-async function fetchUserChats(){
-  const response=await fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/api/myChats`,{credentials:'include'})
-  const data=await response.json()
-  console.log(data)
-  // return data
-  setChats(data)
-}
+
 
 function displayUser(participants:any){
   if(participants[0].email===session?.user?.email){
@@ -55,7 +38,18 @@ function displayUser(participants:any){
   }
   return participants[0]
 }
-
+useEffect(()=>{
+  return ()=>{
+  async function fetchChats(){
+    const fetchedData=await fetchUserChats()
+    setChats(fetchedData)
+    }
+    setTimeout(()=>{
+      fetchChats()
+    },5000)
+ 
+  }
+  },[])
   return (
     <aside className="flex h-screen w-96 flex-col border-r bg-black px-5 py-8">
         <div className='flex'>
