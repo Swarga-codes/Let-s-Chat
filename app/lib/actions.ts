@@ -1,11 +1,6 @@
 import { redirect } from "next/navigation"
 
-async function fetchSearchResults(query:string){
-    if(!query) return []
-    const response=await fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/api/search/users/${query}`)
-    const data=await response.json()
-    return data
-}
+
 
 async function createChat(chatName:string,participants:string[],isGroupChat:boolean,GroupAdminEmail:string){
     const response=await fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/api/createChat`,{
@@ -50,9 +45,9 @@ async function sendMessage(chatId:string,content:string) {
 async function fetchMessages(chatId:string) {
     const response=await fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/api/messages/${chatId}`)
     const data=await response.json()
-    console.log(data)
+    // console.log(data)
    return data
     
 }
 
-export {fetchSearchResults, createChat, fetchUserChats, sendMessage, fetchMessages}
+export {createChat, fetchUserChats, sendMessage, fetchMessages}
