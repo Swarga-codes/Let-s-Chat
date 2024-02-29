@@ -57,9 +57,13 @@ useEffect(()=>{
         {messages.length === 0 && <p className='font-bold text-center'>Oops no texts! Start a conversation!</p>}
         {messages.length > 0 && messages.map((message:any) => (
           session?.user?.email !== message?.sender?.email ? (
+            <>
             <div className='bg-gray-700 p-3 w-fit rounded-md my-2' key={message._id}>
-              <p>{message?.content}</p>
+           {currentChat?.isGroupChat && <p className='font-semibold'>{message?.sender?.name}</p>}
+
+              <p className='text-md'>{message?.content}</p>
             </div>
+            </>
           ) : (
             <div className='bg-gray-700 p-3 w-fit rounded-md ml-auto my-2' key={message._id}>
               <p>{message?.content}</p>

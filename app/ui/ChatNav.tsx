@@ -21,7 +21,7 @@ function ChatNav() {
           />
           <div className='ml-4'>
             <h1 className='text-xl font-semibold'>{currentChat?.chatName?currentChat?.chatName:displayUser(currentChat?.participants)?.name}</h1>
-            {/* <p>online</p> */}
+          {currentChat?.isGroupChat &&  <p>{currentChat?.participants.length} participants</p>}
           </div>
           
         </div>

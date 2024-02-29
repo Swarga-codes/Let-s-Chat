@@ -173,12 +173,21 @@ async function fetchSearchResults(query:string){
           setCurrentChat(chat)
           }}
             >
-               <Image
+               {chat?.isGroupChat?
+                <Image
+                src={"https://cdn-icons-png.freepik.com/512/2352/2352167.png"}
+                alt="profile pic"
+                width={40}
+                height={40}
+                className='bg-white rounded-lg'
+              />
+               :
+                <Image
             src={chat.isGroupChat?chat?.GroupPhoto:displayUser(chat.participants)?.profilePic}
             alt="profile pic"
             width={40}
             height={40}
-          />
+          />}
           <div className='ml-2'>
               <p className="mx-2 text-md font-semibold">{chat.chatName?chat.chatName:displayUser(chat.participants)?.name}</p>
             

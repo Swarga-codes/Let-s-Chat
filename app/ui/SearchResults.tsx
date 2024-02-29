@@ -17,7 +17,7 @@ import toast from 'react-hot-toast'
               className="flex transform items-center rounded-lg px-3 cursor-pointer py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
              key={idx} onClick={async()=>{
               if(user?.email===session?.user?.email){
-                console.log('Cannot create a self chat...')
+                toast.error('Cannot create a self chat...')
                 return
               }
              

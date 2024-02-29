@@ -46,7 +46,7 @@ async function sendMessage(chatId:string,content:string) {
 async function fetchMessages(chatId:string) {
     const response=await fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/api/messages/${chatId}`)
     const data=await response.json()
-    // console.log(data)
+    console.log(data)
    return data
     
 }
