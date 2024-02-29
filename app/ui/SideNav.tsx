@@ -11,6 +11,7 @@ import { fetchUserChats } from '../lib/actions'
 import { currentChatContext, welcomePageContext } from '../lib/context'
 import { useSession } from 'next-auth/react'
 import GroupChatForm from './GroupChatForm'
+import { Chats, Participants } from '../lib/types'
 function classNames(...classes:string[]) {
   return classes.filter(Boolean).join(' ')
 }
@@ -30,10 +31,10 @@ const useDebouncedValue = (value:string, delay:number) => {
 
 export default function SideNav() {
 const [searchQuery,setSearchQuery]=useState('')
-const [open, setOpen] = useState(false)
-const [searchData,setSearchData]=useState([])
-const [isSearching,setIsSearching]=useState(false)
-const [chats,setChats]=useState([])
+const [open, setOpen] = useState<boolean>(false)
+const [searchData,setSearchData]=useState<Participants[]>([])
+const [isSearching,setIsSearching]=useState<boolean>(false)
+const [chats,setChats]=useState<Chats[]>([])
 const {isWelcome,setIsWelcome}=useContext(welcomePageContext)
 const {currentChat,setCurrentChat}=useContext(currentChatContext)
 const {data:session}=useSession()
@@ -61,7 +62,7 @@ if(pathname==='/login'){
 
 
 
-function displayUser(participants:any){
+function displayUser(participants:Participants[]){
   if(participants[0].email===session?.user?.email){
     return participants[1]
   }
@@ -165,7 +166,7 @@ async function fetchSearchResults(query:string){
             <label className="px-3 text-md font-semibold uppercase text-white">My Chats</label>
             
             {chats?.length===0 &&  <p className="px-3 text-md font-semibold text-white">No Chats to display, search users to chat now!</p>}
-            {chats?.map((chat:any)=>(
+            {chats?.map((chat:Chats)=>(
               <div
               className={`flex transform items-center rounded-lg px-3 py-2 text-gray-200 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700 ${currentChat?._id===chat?._id?"bg-gray-100 text-gray-700":""}`}
            key={chat._id} onClick={()=>{
@@ -191,7 +192,7 @@ async function fetchSearchResults(query:string){
           <div className='ml-2'>
               <p className="mx-2 text-md font-semibold">{chat.chatName?chat.chatName:displayUser(chat.participants)?.name}</p>
             
-              <p className="mx-2 text-sm font-md">{chat.lastMessageId?chat.lastMessageId?.content:"Start conversation!"}</p>
+              <p className="mx-2 text-sm font-md">{"Start conversation!"}</p>
               </div>
             </div>
             ))

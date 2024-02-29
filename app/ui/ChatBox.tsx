@@ -1,9 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { SendHorizontal } from 'lucide-react'
 import { currentChatContext } from '../lib/context'
 import { sendMessage } from '../lib/actions'
+import { Message, SetMessageInputType, SetMessagesType } from '../lib/types'
+import { Socket } from 'socket.io-client'
 
-function ChatBox({ messageInput, setMessageInput, messages, setMessages, socket }: any) {
+function ChatBox({ messageInput, setMessageInput, messages, setMessages, socket }:{messageInput:string,setMessageInput:SetMessageInputType,messages:Message[],setMessages:SetMessagesType,socket:Socket}) {
   const { currentChat } = useContext(currentChatContext)
 
   const handleSendMessage = async () => {

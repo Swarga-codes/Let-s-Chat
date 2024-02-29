@@ -4,21 +4,23 @@ import { fetchMessages } from '../lib/actions';
 import { useSession } from 'next-auth/react';
 import ChatBox from './ChatBox';
 import { Socket, io } from 'socket.io-client';
+import { Chats, Message, Participants } from '../lib/types';
    
-const socket:any = io('https://let-s-chat.onrender.com')
+var socket:Socket;
 function ChatSection() {
-  const chatCompare:any = useRef(null);
-  const chatScroll:any=useRef(null)
+  const chatCompare = useRef<Chats | null>(null);
+  const chatScroll=useRef<HTMLDivElement>(null)
   const { currentChat } = useContext(currentChatContext);
   const { data: session } = useSession();
-  const [messages, setMessages] = useState<any[]>([]);
-  const [isSocketConnected, setIsSocketConnected] = useState(false);
-  const [messageInput, setMessageInput] = useState('');
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isSocketConnected, setIsSocketConnected] = useState<boolean>(false);
+  const [messageInput, setMessageInput] = useState<string>('');
 
 
 
   useEffect(() => {
-    socket.emit('setup', currentChat.participants.find((participant:any) => participant.email === session?.user?.email));
+   socket = io('https://let-s-chat.onrender.com')
+    socket.emit('setup', currentChat.participants.find((participant:Participants) => participant.email === session?.user?.email));
     socket.on('connection', () => setIsSocketConnected(true));
 },[currentChat.participants,session?.user?.email]);
 
@@ -33,11 +35,11 @@ function ChatSection() {
   }, [currentChat]);
 
   useEffect(() => {
-    const handleNewMessage = (newMessage:any) => {
+    const handleNewMessage = (newMessage:Message) => {
       if (!chatCompare.current || chatCompare.current._id !== newMessage.chatId._id) {
         // Notify or handle the condition appropriately
       } else {
-        setMessages((prevMessages:any) => [...prevMessages, newMessage]);
+        setMessages((prevMessages:Message[]) => [...prevMessages, newMessage]);
       }
     };
   
@@ -46,16 +48,18 @@ function ChatSection() {
     return () => {
       socket.off('message received', handleNewMessage);
     };
-  }, []);
+  });
   
 useEffect(()=>{
+  if(chatScroll.current){
   chatScroll.current.scrollTop=chatScroll.current.scrollHeight
+  }
 },[messages])
   return (
     <>
       <div className='p-3 overflow-y-scroll max-h-[500px]' ref={chatScroll}>
         {messages.length === 0 && <p className='font-bold text-center'>Oops no texts! Start a conversation!</p>}
-        {messages.length > 0 && messages.map((message:any) => (
+        {messages.length > 0 && messages.map((message:Message) => (
           session?.user?.email !== message?.sender?.email ? (
             <>
             <div className='bg-gray-700 p-3 w-fit rounded-md my-2' key={message._id}>

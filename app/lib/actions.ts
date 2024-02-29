@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation"
 
 
 
@@ -16,13 +15,13 @@ async function createChat(chatName:string,participants:string[],isGroupChat:bool
         }),
     })
     const data=await response.json()
-    console.log(data)
     return data
 }
 
 async function fetchUserChats(){
     const response=await fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/api/myChats`)
     const data=await response.json()
+    // console.log(data)
     return data
 }
 

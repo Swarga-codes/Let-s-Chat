@@ -10,7 +10,7 @@ function WelcomePage() {
         height={150}
         alt='App logo'
         />
-        <h1 className='font-bold text-3xl mt-2'>Welcome to My Chat!</h1>
+        <h1 className='font-bold text-3xl mt-4'>Welcome to Let's Chat!</h1>
     </div>
   )
 }

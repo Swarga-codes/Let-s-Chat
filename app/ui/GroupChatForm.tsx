@@ -4,12 +4,13 @@ import GroupUsersResults from './GroupUsersResult'
 import { createChat,fetchUserChats } from '../lib/actions'
 import { useSession } from 'next-auth/react'
 import toast from 'react-hot-toast'
-export default function GroupChatForm({open,setOpen,setChats}:any) {
-    const [search,setSearch]=useState("")
-    const [groupName,setGroupName]=useState("")
-    const [isSearching,setIsSearching]=useState(false)
-    const [SearchResult,setSearchResult]=useState([])
-    const [participants,setParticipants]=useState([])
+import { GroupChatParticipants, Participants, SetChatsType, SetOpenType } from '../lib/types'
+export default function GroupChatForm({open,setOpen,setChats}:{open:boolean,setOpen:SetOpenType,setChats:SetChatsType}) {
+    const [search,setSearch]=useState<string>("")
+    const [groupName,setGroupName]=useState<string>("")
+    const [isSearching,setIsSearching]=useState<boolean>(false)
+    const [SearchResult,setSearchResult]=useState<Participants[]>([])
+    const [participants,setParticipants]=useState<GroupChatParticipants[]>([])
   const cancelButtonRef = useRef(null)
   const {data:session}=useSession()
   async function fetchSearchResults(query:string){
@@ -81,20 +82,20 @@ export default function GroupChatForm({open,setOpen,setChats}:any) {
       ></input>
     </div>
     <div className='flex flex-wrap'>
-    {participants?.map((participant:any,idx:number)=>(
+    {participants?.map((participant:GroupChatParticipants,idx:number)=>(
     <div className="flex p-2 bg-blue-600 w-fit rounded-lg mr-2 mb-2" key={idx}>
       <p className='mr-2'>{participant?.name}</p>
       <svg onClick={()=>{
         participants.splice(idx,1)
         setParticipants([...participants])
         }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
 </svg>
 
     </div>))}
   
     </div>
-    {search && <GroupUsersResults userData={SearchResult} isSearching={isSearching} setChats={setChats} participants={participants} setParticipants={setParticipants}/>}
+    {search && <GroupUsersResults userData={SearchResult} isSearching={isSearching} participants={participants} setParticipants={setParticipants}/>}
 
                      
                     </div>
@@ -107,7 +108,7 @@ export default function GroupChatForm({open,setOpen,setChats}:any) {
                     onClick={async() => {
              
               if(window.confirm(`Do you want to create a group with name ${groupName} ?`)){
-                const participantIds=participants.map((participant:any)=>participant.id)
+                const participantIds=participants.map((participant:GroupChatParticipants)=>participant._id)
                 const message=await createChat(groupName,participantIds,true,session?.user?.email || "")
                 if(message.success){
                   setChats(await fetchUserChats())

@@ -4,13 +4,14 @@ import Image from 'next/image'
 import { createChat, fetchUserChats } from '../lib/actions'
 import { useSession } from 'next-auth/react'
 import toast from 'react-hot-toast'
- function SearchResults({userData,isSearching,setChats}:any) {
+import { Participants, SetChatsType } from '../lib/types'
+ function SearchResults({userData,isSearching,setChats}:{userData:Participants[],isSearching:boolean,setChats:SetChatsType}) {
     const {data:session}=useSession()
   return (
     <div className='border-gray-400 border-2 rounded-lg'>
       {userData.length===0 && !isSearching && <p className='p-6'>No user found!</p>}
       {userData.length===0 && isSearching && <p className='p-6'>Searching for users...</p>}
-         {userData?.map((user:any,idx:number)=>(
+         {userData?.map((user:Participants,idx:number)=>(
 
         
             <div
