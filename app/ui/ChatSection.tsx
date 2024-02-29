@@ -3,44 +3,51 @@ import { currentChatContext } from '../lib/context';
 import { fetchMessages } from '../lib/actions';
 import { useSession } from 'next-auth/react';
 import ChatBox from './ChatBox';
-import { io } from 'socket.io-client';
-
-// const socket = io('http://localhost:8000');
-const socket = io('https://let-s-chat.onrender.com');
+import { Socket, io } from 'socket.io-client';
+   
+const socket:any = io('https://let-s-chat.onrender.com')
 function ChatSection() {
   const chatCompare:any = useRef(null);
   const chatScroll:any=useRef(null)
   const { currentChat } = useContext(currentChatContext);
   const { data: session } = useSession();
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<any[]>([]);
   const [isSocketConnected, setIsSocketConnected] = useState(false);
   const [messageInput, setMessageInput] = useState('');
 
-  const getMessages = useCallback(async () => {
-    setMessages(await fetchMessages(currentChat._id));
-    socket.emit('join chat', currentChat._id);
-  }, [currentChat._id]);
+
 
   useEffect(() => {
     socket.emit('setup', currentChat.participants.find((participant:any) => participant.email === session?.user?.email));
     socket.on('connection', () => setIsSocketConnected(true));
-  },[currentChat.participants,session?.user?.email]);
+},[currentChat.participants,session?.user?.email]);
 
   useEffect(() => {
+    const getMessages = async () => {
+      setMessages(await fetchMessages(currentChat._id));
+      socket.emit('join chat', currentChat._id);
+    }
     getMessages();
     chatCompare.current = currentChat;
    
-  }, [currentChat, getMessages]);
+  }, [currentChat]);
 
   useEffect(() => {
-    socket.on('message received', newMessage => {
+    const handleNewMessage = (newMessage:any) => {
       if (!chatCompare.current || chatCompare.current._id !== newMessage.chatId._id) {
-        // notify
+        // Notify or handle the condition appropriately
       } else {
-        setMessages((prevMessages):any => [...prevMessages, newMessage]);
+        setMessages((prevMessages:any) => [...prevMessages, newMessage]);
       }
-    });
-  });
+    };
+  
+    socket.on('message received', handleNewMessage);
+  
+    return () => {
+      socket.off('message received', handleNewMessage);
+    };
+  }, []);
+  
 useEffect(()=>{
   chatScroll.current.scrollTop=chatScroll.current.scrollHeight
 },[messages])
