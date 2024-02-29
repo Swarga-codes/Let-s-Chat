@@ -3,6 +3,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import GroupUsersResults from './GroupUsersResult'
 import { createChat,fetchUserChats } from '../lib/actions'
 import { useSession } from 'next-auth/react'
+import toast from 'react-hot-toast'
 export default function GroupChatForm({open,setOpen,setChats}:any) {
     const [search,setSearch]=useState("")
     const [groupName,setGroupName]=useState("")
@@ -110,9 +111,12 @@ export default function GroupChatForm({open,setOpen,setChats}:any) {
                 const message=await createChat(groupName,participantIds,true,session?.user?.email || "")
                 if(message.success){
                   setChats(await fetchUserChats())
+                  toast.success(message.success)
                   setOpen(false)
                 }
-                
+                else{
+                  toast.error(message.error)
+                }
                 
               }
                     }}

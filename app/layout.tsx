@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import Providers from '@/app/ui/Providers'
 import SideNav from '@/app/ui/SideNav'
-
+import { Toaster } from 'react-hot-toast'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata:Metadata={
@@ -20,6 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className} style={{overflow:'hidden'}}>
         <Providers>
+        <div><Toaster/></div>
        {children}
           </Providers></body>
     </html>

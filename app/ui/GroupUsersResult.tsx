@@ -1,9 +1,9 @@
 'use client'
 import React from 'react'
 import Image from 'next/image'
-import { createChat, fetchUserChats } from '../lib/actions'
 import { useSession } from 'next-auth/react'
- function GroupUsersResults({userData,isSearching,setChats,participants,setParticipants}:any) {
+import toast from 'react-hot-toast'
+ function GroupUsersResults({userData,isSearching,participants,setParticipants}:any) {
     const {data:session}=useSession()
   return (
     <div className='border-gray-400 border-2 rounded-lg'>
@@ -18,13 +18,13 @@ import { useSession } from 'next-auth/react'
            
            const isPresent=participants.filter((participant:any)=>participant.name===user?.name)
            if(user?.name===session?.user?.name){
-            console.log('Admin is already added by default!')
+            toast.error('Admin is already added by default!')
            }
            else if(!isPresent.length){
             setParticipants([...participants,{id:user?._id,name:user?.name}])
            }
            else{
-            console.log('Participant already present!')
+            toast.error('Participant already present!')
            }
              }}>
                <Image
