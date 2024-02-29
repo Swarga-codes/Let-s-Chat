@@ -10,6 +10,7 @@ import SearchResults from './SearchResults'
 import { fetchUserChats } from '../lib/actions'
 import { currentChatContext, welcomePageContext } from '../lib/context'
 import { useSession } from 'next-auth/react'
+import GroupChatForm from './GroupChatForm'
 function classNames(...classes:string[]) {
   return classes.filter(Boolean).join(' ')
 }
@@ -29,6 +30,7 @@ const useDebouncedValue = (value:string, delay:number) => {
 
 export default function SideNav() {
 const [searchQuery,setSearchQuery]=useState('')
+const [open, setOpen] = useState(false)
 const [searchData,setSearchData]=useState([])
 const [isSearching,setIsSearching]=useState(false)
 const [chats,setChats]=useState([])
@@ -36,7 +38,7 @@ const {isWelcome,setIsWelcome}=useContext(welcomePageContext)
 const {currentChat,setCurrentChat}=useContext(currentChatContext)
 const {data:session}=useSession()
 const pathname=usePathname()
-const debouncedSearchQuery = useDebouncedValue(searchQuery, 1400);
+const debouncedSearchQuery = useDebouncedValue(searchQuery, 400);
 useEffect(() => {
   if (debouncedSearchQuery) {
     fetchSearchResults(debouncedSearchQuery);
@@ -70,11 +72,11 @@ async function fetchSearchResults(query:string){
   const response=await fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/api/search/users/${query}`)
   const data=await response.json()
   setSearchData(data)
-  console.log('called')
   setIsSearching(false)
 }
 
   return (
+    <>
     <aside className="flex h-screen w-96 flex-col border-r bg-black px-5 py-8">
         <div className='flex'>
      <Image
@@ -112,12 +114,15 @@ async function fetchSearchResults(query:string){
                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="#"
+                          <button
+                           
                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                          onClick={()=>{
+                            setOpen(true)
+                          }}
                           >
                             Create Group
-                          </a>
+                          </button>
                         )}
                       </Menu.Item>
                       <Menu.Item>
@@ -188,5 +193,7 @@ async function fetchSearchResults(query:string){
         </nav>
       </div>
     </aside>
+<GroupChatForm open={open} setOpen={setOpen} setChats={setChats}/>
+    </>
   )
 }

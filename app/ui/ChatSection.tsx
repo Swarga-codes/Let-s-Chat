@@ -7,7 +7,6 @@ import { io } from 'socket.io-client';
 
 // const socket = io('http://localhost:8000');
 const socket = io('https://let-s-chat.onrender.com');
-
 function ChatSection() {
   const chatCompare:any = useRef(null);
   const chatScroll:any=useRef(null)
@@ -41,7 +40,7 @@ function ChatSection() {
         setMessages((prevMessages):any => [...prevMessages, newMessage]);
       }
     });
-  }, []);
+  });
 useEffect(()=>{
   chatScroll.current.scrollTop=chatScroll.current.scrollHeight
 },[messages])
