@@ -3,6 +3,7 @@ import React from 'react'
 import Image from 'next/image'
 import { createChat, fetchUserChats } from '../lib/actions'
 import { useSession } from 'next-auth/react'
+import toast from 'react-hot-toast'
  function SearchResults({userData,isSearching,setChats}:any) {
     const {data:session}=useSession()
   return (
@@ -25,6 +26,10 @@ import { useSession } from 'next-auth/react'
                 const message=await createChat("",[user._id],false,session?.user?.email || "")
                 if(message.success){
                   setChats(await fetchUserChats())
+                  toast.success(message.success)
+                }
+                else{
+                  toast.error(message.error)
                 }
                 
               }

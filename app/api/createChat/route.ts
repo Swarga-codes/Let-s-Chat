@@ -18,12 +18,7 @@ export async function POST(req:NextRequest){
   const reqUser=await USER.find({email:GroupAdminEmail})
   if(reqUser.length===0) return NextResponse.json({error:'Invalid user!'})
   participants.push(reqUser[0].id+"")
-  const isExistingChat=await CHAT.find()
-for(const chat of isExistingChat){
-    if(JSON.stringify(participants.sort())===JSON.stringify(chat.participants.sort())){
-      return NextResponse.json({error:'Chat already exists!'},{status:409})
-    }
-  }
+
   if(isGroupChat){
     if(!chatName){
       return NextResponse.json({error:'Please provide a group name for the group chat!'},{status:422})
@@ -36,6 +31,12 @@ for(const chat of isExistingChat){
     if(participants.length!==2){
       return NextResponse.json({error:'Personal chat should have 2 participants'},{status:422})
     }
+    const isExistingChat=await CHAT.find()
+    for(const chat of isExistingChat){
+        if(JSON.stringify(participants.sort())===JSON.stringify(chat.participants.sort())){
+          return NextResponse.json({error:'Chat already exists!'},{status:409})
+        }
+      }
   }
   const chat=new CHAT({
     chatName,
