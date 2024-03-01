@@ -164,7 +164,7 @@ async function fetchSearchResults(query:string){
           {searchQuery && <SearchResults userData={searchData} isSearching={isSearching} setChats={setChats}/>}
           <div className="space-y-3 ">
             <label className="px-3 text-md font-semibold uppercase text-white">My Chats</label>
-            
+          <div className='overflow-y-scroll max-h-[70vh]'>
             {chats?.length===0 &&  <p className="px-3 text-md font-semibold text-white">No Chats to display, search users to chat now!</p>}
             {chats?.map((chat:Chats)=>(
               <div
@@ -192,11 +192,12 @@ async function fetchSearchResults(query:string){
           <div className='ml-2'>
               <p className="mx-2 text-md font-semibold">{chat.chatName?chat.chatName:displayUser(chat.participants)?.name}</p>
             
-              <p className="mx-2 text-sm font-md">{"Start conversation!"}</p>
+              <p className="mx-2 text-sm font-md">{"Tap to have conversation!"}</p>
               </div>
             </div>
             ))
             }
+            </div>
           </div>
 
     

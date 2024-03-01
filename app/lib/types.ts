@@ -17,7 +17,7 @@ interface Chats{
     chatName:string,
     createdAt:string,
     isGroupChat:boolean,
-    lastMessageId:string,
+    lastMessageId:Message,
     participants: Participants[],
     updatedAt:string,
     _id:string
