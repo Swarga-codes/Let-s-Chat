@@ -19,7 +19,7 @@ function ChatSection() {
 
 
   useEffect(() => {
-   socket = io(process.env.NEXT_PUBLIC_SOCKET_URI || "")
+   socket = io(process.env.SOCKET_URI || "")
     socket.emit('setup', currentChat.participants.find((participant:Participants) => participant.email === session?.user?.email));
     socket.on('connection', () => setIsSocketConnected(true));
 },[currentChat.participants,session?.user?.email]);
