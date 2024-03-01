@@ -48,7 +48,7 @@ function ChatSection() {
     return () => {
       socket.off('message received', handleNewMessage);
     };
-  });
+  },[]);
   
 useEffect(()=>{
   if(chatScroll.current){
